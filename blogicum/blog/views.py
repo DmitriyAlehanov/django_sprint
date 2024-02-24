@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.http import Http404
 
 
 posts = [
@@ -44,7 +45,7 @@ posts = [
     },
 ]
 
-posts_dict = {post['id']: post for post in posts}
+POSTS_ID_DETAIL = {post['id']: post for post in posts}
 
 
 def index(request):
@@ -54,8 +55,11 @@ def index(request):
 
 def post_detail(request, post_id):
     template = 'blog/detail.html'
-    context = {'post': posts_dict[post_id]}
-    return render(request, template, context)
+    context = {'post': POSTS_ID_DETAIL[post_id]}
+    if post_id in POSTS_ID_DETAIL:
+        return render(request, template, context)
+    else:
+        raise Http404(f"Поста под номером {post_id} не существует")
 
 
 def category_posts(request, category_slug):
