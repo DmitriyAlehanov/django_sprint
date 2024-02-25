@@ -45,7 +45,7 @@ posts = [
     },
 ]
 
-POSTS_ID_DETAIL = {post['id']: post for post in posts}
+POSTS = {post['id']: post for post in posts}
 
 
 def index(request):
@@ -55,11 +55,10 @@ def index(request):
 
 def post_detail(request, post_id):
     template = 'blog/detail.html'
-    context = {'post': POSTS_ID_DETAIL[post_id]}
-    if post_id in POSTS_ID_DETAIL:
+    context = {'post': POSTS[post_id]}
+    if post_id in POSTS:
         return render(request, template, context)
-    else:
-        raise Http404(f"Поста под номером {post_id} не существует")
+    raise Http404(f"Поста под номером {post_id} не существует")
 
 
 def category_posts(request, category_slug):
